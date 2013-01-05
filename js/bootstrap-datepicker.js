@@ -54,6 +54,13 @@
 			this.forceParse = this.element.data('date-force-parse');
 		}
 
+        var elementData = this.element.data();
+        if ('maxViewMode' in options) {
+            this.maxViewMode = options.maxViewMode;
+        } else if ('dateMaxViewMode' in elementData){
+            this.maxViewMode = elementData.dateMaxViewMode;
+        }
+        if (this.maxViewMode === undefined) this.maxViewMode = 2;
 
 		this.picker = $(DPGlobal.template)
 							.appendTo(this.isInline ? this.element : 'body')
@@ -728,7 +735,7 @@
 
 		showMode: function(dir) {
 			if (dir) {
-				this.viewMode = Math.max(0, Math.min(2, this.viewMode + dir));
+				this.viewMode = Math.max(0, Math.min(this.maxViewMode, this.viewMode + dir));
 			}
 			/*
 				vitalets: fixing bug of very special conditions:
