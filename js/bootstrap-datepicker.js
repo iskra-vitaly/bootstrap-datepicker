@@ -62,6 +62,14 @@
         }
         if (this.maxViewMode === undefined) this.maxViewMode = 2;
 
+        if ('cellDecorator' in options) {
+            this.cellDecorator = options.cellDecorator;
+        } else if ('dateCellDecorator' in elementData) {
+            this.cellDecorator = elementData.dateCellDecorator;
+        }
+
+        if (!$.isFunction(this.cellDecorator)) this.cellDecorator = function(content){return content};
+
 		this.picker = $(DPGlobal.template)
 							.appendTo(this.isInline ? this.element : 'body')
 							.on({
@@ -347,7 +355,7 @@
 			var dowCnt = this.weekStart,
 			html = '<tr>';
 			while (dowCnt < this.weekStart + 7) {
-				html += '<th class="dow">'+dates[this.language].daysMin[(dowCnt++)%7]+'</th>';
+				html += '<th class="dow">'+this.cellDecorator(dates[this.language].daysMin[(dowCnt++)%7])+'</th>';
 			}
 			html += '</tr>';
 			this.picker.find('.datepicker-days thead').append(html);
@@ -412,7 +420,7 @@
 					$.inArray(prevMonth.getUTCDay(), this.daysOfWeekDisabled) !== -1) {
 					clsName += ' disabled';
 				}
-				html.push('<td class="day'+clsName+'">'+prevMonth.getUTCDate() + '</td>');
+				html.push('<td class="day'+clsName+'">'+this.cellDecorator(prevMonth.getUTCDate()) + '</td>');
 				if (prevMonth.getUTCDay() == this.weekEnd) {
 					html.push('</tr>');
 				}
